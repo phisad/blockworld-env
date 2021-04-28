@@ -1,0 +1,33 @@
+{
+  "tags": [
+    "env-to-image"
+  ],
+  "params": {
+    "cpu_only": false,
+    "batch_size": 10,
+    "num_epochs": 10
+  },
+  "task": "tasks/t-random-digit-colored.json",
+  "env": {
+    "package": "blockenv.env",
+    "class": "Block2dEnv"
+  },
+  "dataset": {
+    "package": "blockenv.providers",
+    "class": "SequentialSingleRandomBlockEnvDataset",
+    "description": "Produces random block2d board positions with 1 block in sequential class order. ",
+    "params": {
+      "num_samples": "$num_samples_per_epoch",
+      "num_samples_comment": "The number of samples per epoch. Should be a multiple of the batch size."
+    }
+  },
+  "callbacks": [
+    {
+      "package": "blockenv.callbacks", "class": "SaveImagePatchByLabel",
+      "kwargs": {
+        "target_directory": "$dataset_directory/single-colored-patches",
+        "split_name": "$split_name"
+      }
+    }
+  ]
+}

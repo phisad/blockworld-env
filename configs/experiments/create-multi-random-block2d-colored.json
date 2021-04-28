@@ -1,0 +1,33 @@
+{
+  "tags": [
+    "env-to-image"
+  ],
+  "params": {
+    "cpu_only": false,
+    "batch_size": 10,
+    "num_epochs": 8
+  },
+  "task": "tasks/t-random-digit-colored.json",
+  "env": {
+    "package": "blockenv.env",
+    "class": "Block2dEnv"
+  },
+  "dataset": {
+    "package": "blockenv.providers",
+    "class": "IncrementalMultiRandomBlockEnvDataset",
+    "description": "Produces random block2d board positions of at least 2 blocks increased by one each epoch",
+    "params": {
+      "num_samples": "$num_samples_per_epoch",
+      "num_samples_comment": "The number of samples per epoch. Should be a multiple of the batch size."
+    }
+  },
+  "callbacks": [
+    {
+      "package": "blockenv.callbacks", "class": "SaveImageByLabelCount",
+      "kwargs": {
+        "target_directory": "$dataset_directory/multi-colored",
+        "split_name": "$split_name"
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "tags": [
+    "env-to-image"
+  ],
+  "params": {
+    "cpu_only": false,
+    "batch_size": 10,
+    "num_epochs": 19,
+    "target_directory": "$dataset_directory/multi",
+    "target_directory_comment": "Where to save the annotations and images."
+  },
+  "task": {
+    "name": "env-to-image",
+    "block_decoration": "digit",
+    "block_placement": "random",
+    "block_placement_comment": "Initial block at random positions on the board",
+    "mouse_placement": "none",
+    "mouse_placement_comment": "With 'none' create no mouse at all.",
+    "num_classes": 20
+  },
+  "env": {
+    "package": "blockenv.env",
+    "class": "Block2dEnv"
+  },
+  "dataset": {
+    "package": "blockenv.providers",
+    "class": "IncrementalMultiRandomBlockEnvDataset",
+    "description": "Produces random block2d board positions of at least 2 blocks increased by one each epoch",
+    "params": {
+      "num_samples": "$num_samples_per_epoch",
+      "num_samples_comment": "The number of samples per epoch. Should be a multiple of the batch size."
+    }
+  },
+  "callbacks": [
+    {
+      "package": "blockenv.callbacks", "class": "SaveImageByLabelCount",
+      "kwargs": {
+        "target_directory": "$dataset_directory/multi",
+        "split_name": "$split_name"
+      }
+    }
+  ]
+}
